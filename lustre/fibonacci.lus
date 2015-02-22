@@ -1,0 +1,4 @@
+node fibonacci (x :  bool) returns (fn: int)
+let
+  fn= 0->(pre(1 ->(fn +(pre fn))));
+tel;

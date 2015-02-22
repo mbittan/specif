@@ -1,0 +1,7 @@
+node watchdog (set, reset, deadline: bool) returns (alarm: bool)
+var isset : bool;
+let
+  isset= if reset then false else (if set then true else false -> pre isset);
+  alarm = isset and deadline; 
+  assert not (set and reset);
+tel;

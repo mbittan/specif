@@ -1,0 +1,15 @@
+node feux (td, ti, cp : bool) returns (veilleuses, code, phares: bool)
+var c : bool;
+let
+  c=if cp then not (false-> pre c) else (false->pre c);
+  veilleuses = if td and not (false->pre (veilleuses or code or phares)) then true 
+               else (if (false -> pre(phares or code)) and ti then true
+                     else (if not (td or cp or ti) then false -> pre veilleuses else false));
+  phares = if (false ->pre code) and cp then true 
+           else (if (false -> pre veilleuses) and td then not c 
+                 else (if not (td or cp or ti) then false -> pre phares else false));
+  code = if (false -> pre phares and cp) then true
+         else (if (false -> pre veilleuses) and td then c 
+               else (if not (td or cp or ti) then false -> pre code else false));
+  assert not (td and ti) and not (td and cp) and not (ti and cp);
+tel;

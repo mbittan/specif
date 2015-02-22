@@ -1,0 +1,4 @@
+node compteur (i, toc : bool) returns (o: int)
+let
+  o= 0-> if toc then 0 else (if i then (pre o) + 1 else pre o);
+tel;

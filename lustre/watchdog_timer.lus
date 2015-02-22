@@ -1,0 +1,9 @@
+include "watchdog.lus"
+
+node watchdog_timer (set, reset : bool; delay :  int) returns (alarm : bool)
+var cpt : int;
+let
+  cpt = if reset or set then 0 else (if (pre cpt)<delay then 0->((pre cpt)+1) else 0);
+  alarm = watchdog(set, reset, cpt>=delay);
+  assert not (set and reset);
+tel;
