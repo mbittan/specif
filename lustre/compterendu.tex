@@ -1,0 +1,73 @@
+\documentclass[a4paper, 11pt]{article}
+ 
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[frenchb]{babel}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata}
+\usepackage{makecell}
+
+\begin{document}
+ 
+\title{SPECIF\\Compte-rendu TP2}
+\author{Maxime Bittan}
+\date{02/03/2015}
+ 
+\maketitle
+ 
+\paragraph{Question 1}
+Le code correspondant au métronome se trouve dans le fichier $metronome.lus$. Le code C généré présente un seul état, avec une seule transition vers celui-ci.
+
+\paragraph{Question 2}
+Les variables présentes dans le code C généré correspondent aux variable Lustre suivantes : 
+\begin{itemize}
+  \item \_V1 : reset
+  \item \_V2 : delay
+  \item \_V3 : true$\rightarrow$false
+  \item \_V4 : init
+  \item \_V5 : n
+  \item \_V6 : hz
+  \item \_V7 : state
+  \item \_V8 : tic
+  \item \_V9 : tac
+\end{itemize}
+
+\paragraph{}
+Soit $D = \{first, init, hz, n, state, tic, tac\}$, avec $first$ initialisé à \texttt{true}.
+
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+                    semithick]
+  \tikzstyle{every state}=[fill=white,text=black]
+
+  \node[initial,state] (s0) {$s_0$};
+  \path (s0) edge [loop right] node 
+        {\makecell[l]{[true]\\
+            lire $reset, delay$ \\
+            init $\leftarrow$ \textbf{if} first \textbf{then} reset \textbf{else} init $||$ reset;\\
+            hz $\leftarrow$ \textbf{if} reset \textbf{then} delay \textbf{else} (\textbf{if} first \textbf{then} 0 \textbf{else} hz);\\
+            n $\leftarrow$ \textbf{if} reset \textbf{then} delay \textbf{else} 
+            (\textbf{if} first \textbf{then} hz-1 \textbf{else} \\
+            (\textbf{if} init and n$>$0 \textbf{then} n-1 \textbf{else} hz-1));\\
+            state $\leftarrow$ \textbf{if} n=0 \textbf{then}\\
+            (\textbf{if} first \textbf{then} true \textbf{else} not state)\\
+            \textbf{else}(\textbf{if} first \textbf{then} false \textbf{else} state);\\
+            tic $\leftarrow$ \textbf{if} init and n=0 and hz$>$0 \textbf{then} state \textbf{else} false;\\
+            tac $\leftarrow$ \textbf{if} init and n=0 and hz$>$0 \textbf{then} not state \textbf{else} false;\\
+            first $\leftarrow$ false;}} (s0);
+\end{tikzpicture}
+
+\paragraph{Question 3}
+Les valeurs lustres correspondant aux variables du code C généré par la commande lus2oc -2 sont les suivantes :
+\begin{itemize}
+  \item \_V1 : reset
+  \item \_V2 : delay
+  \item \_V3 : hz > 0
+  \item \_V4 : hz
+  \item \_V5 : n==0
+  \item \_V6 : n
+  \item \_V7 : n > 0
+  \item \_V8 : tic
+  \item \_V9 : tac
+\end{itemize}
+ 
+\end{document}
